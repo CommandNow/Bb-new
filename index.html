@@ -13,6 +13,7 @@
         li { margin: 10px 0; background: #fff; padding: 15px; border-radius: 8px; }
         a { text-decoration: none; color: #111; font-weight: bold; }
         .info { font-size: 16px; text-align: center; margin-bottom: 20px; }
+        .loc { font-size: 14px; color: #444; }
     </style>
 </head>
 <body>
@@ -20,11 +21,11 @@
     <p class="info">Liste des restos disponibles, cliquez dessus</p>
     <input type="text" id="search" placeholder="Rechercher un restaurant..." onkeyup="filterList()">
     <ul id="restaurantList">
-        <li><a href="burger-paname.html">Burger Paname</a></li>
-        <li><a href="tacos-king.html">Tacos King</a></li>
-        <li><a href="pizza-corner.html">Pizza Corner</a></li>
-        <li><a href="veggie-vibe.html">Veggie Vibe</a></li>
-        <li><a href="sushi-zone.html">Sushi Zone</a></li>
+        <li><a href="burger-paname.html">Burger Paname</a><div class="loc">Paris 18e</div></li>
+        <li><a href="tacos-king.html">Tacos King</a><div class="loc">Marseille</div></li>
+        <li><a href="pizza-corner.html">Pizza Corner</a><div class="loc">Lyon</div></li>
+        <li><a href="veggie-vibe.html">Veggie Vibe</a><div class="loc">Montpellier</div></li>
+        <li><a href="sushi-zone.html">Sushi Zone</a><div class="loc">Toulouse</div></li>
     </ul>
     <script>
         function filterList() {
