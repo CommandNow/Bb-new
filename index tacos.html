@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Tacos King</title>
+</head>
+<body>
+    <h1>Bienvenue chez Tacos King</h1>
+    <p>Commandez et payez ici</p>
+    <button onclick="payWithStripe()">Payer avec Stripe</button>
+    <button onclick="payWithPayPal()">Payer avec PayPal</button>
+
+    <h2>Rechercher un restaurant</h2>
+    <input type="text" id="searchInput" onkeyup="searchRestaurants()" placeholder="Rechercher...">
+    <ul id="restaurantList">
+        <li><a href='../burger-paname/'>Burger Paname</a></li>
+        <li><a href='../tacos-king/'>Tacos King</a></li>
+        <li><a href='../pizza-corner/'>Pizza Corner</a></li>
+        <li><a href='../veggie-vibe/'>Veggie Vibe</a></li>
+        <li><a href='../sushi-zone/'>Sushi Zone</a></li>
+    </ul>
+
+    <script>
+        function payWithStripe() {
+            window.location.href = "https://checkout.stripe.com/pay";
+        }
+        function payWithPayPal() {
+            window.location.href = "https://www.paypal.com/checkoutnow";
+        }
+        function sendToWhatsApp() {
+            const message = encodeURIComponent("Nouvelle commande pour Tacos King");
+            window.open("https://wa.me/tonnumero?text=" + message, "_blank");
+        }
+        function searchRestaurants() {
+            var input = document.getElementById("searchInput");
+            var filter = input.value.toUpperCase();
+            var ul = document.getElementById("restaurantList");
+            var li = ul.getElementsByTagName("li");
+            for (var i = 0; i < li.length; i++) {
+                var a = li[i].getElementsByTagName("a")[0];
+                var txtValue = a.textContent || a.innerText;
+                li[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+            }
+        }
+    </script>
+
+    <button onclick="sendToWhatsApp()">Envoyer sur WhatsApp</button>
+</body>
+</html>
