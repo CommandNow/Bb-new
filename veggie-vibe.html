@@ -10,6 +10,7 @@
         .menu-item { background: #fff; padding: 15px; margin: 10px 0; border-radius: 10px; }
         .btn { background: #111; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; }
         #cart { background: #eee; padding: 15px; margin-top: 30px; border-radius: 10px; }
+        .remove-btn { background: #c00; color: white; border: none; border-radius: 4px; padding: 5px 10px; cursor: pointer; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -17,6 +18,13 @@
     <div class="menu-item">
         <h3>Classic Burger</h3>
         <p>0,00€</p>
+        <label>Formule :</label>
+        <select id="formule1">
+            <option value="Seul">Sandwich seul</option>
+            <option value="Frites">Sandwich + frites</option>
+            <option value="Boisson">Sandwich + boisson</option>
+            <option value="Frites + Boisson">Sandwich + frites + boisson</option>
+        </select><br>
         <label>Sauce :</label>
         <select id="sauce1">
             <option>Algérienne</option>
@@ -25,11 +33,18 @@
         </select><br>
         <label><input type="checkbox" value="Cheddar" class="suppl1"> Cheddar</label>
         <label><input type="checkbox" value="Double steak" class="suppl1"> Double steak</label><br>
-        <button class="btn" onclick="addToCart('Classic Burger', 'sauce1', 'suppl1')">Ajouter au panier</button>
+        <button class="btn" onclick="addToCart('Classic Burger', 'formule1', 'sauce1', 'suppl1')">Ajouter au panier</button>
     </div>
     <div class="menu-item">
         <h3>Bacon Burger</h3>
         <p>0,00€</p>
+        <label>Formule :</label>
+        <select id="formule2">
+            <option value="Seul">Sandwich seul</option>
+            <option value="Frites">Sandwich + frites</option>
+            <option value="Boisson">Sandwich + boisson</option>
+            <option value="Frites + Boisson">Sandwich + frites + boisson</option>
+        </select><br>
         <label>Sauce :</label>
         <select id="sauce2">
             <option>Algérienne</option>
@@ -38,11 +53,18 @@
         </select><br>
         <label><input type="checkbox" value="Cheddar" class="suppl2"> Cheddar</label>
         <label><input type="checkbox" value="Double steak" class="suppl2"> Double steak</label><br>
-        <button class="btn" onclick="addToCart('Bacon Burger', 'sauce2', 'suppl2')">Ajouter au panier</button>
+        <button class="btn" onclick="addToCart('Bacon Burger', 'formule2', 'sauce2', 'suppl2')">Ajouter au panier</button>
     </div>
     <div class="menu-item">
         <h3>Veggie Burger</h3>
         <p>0,00€</p>
+        <label>Formule :</label>
+        <select id="formule3">
+            <option value="Seul">Sandwich seul</option>
+            <option value="Frites">Sandwich + frites</option>
+            <option value="Boisson">Sandwich + boisson</option>
+            <option value="Frites + Boisson">Sandwich + frites + boisson</option>
+        </select><br>
         <label>Sauce :</label>
         <select id="sauce3">
             <option>Algérienne</option>
@@ -51,11 +73,18 @@
         </select><br>
         <label><input type="checkbox" value="Cheddar" class="suppl3"> Cheddar</label>
         <label><input type="checkbox" value="Double steak" class="suppl3"> Double steak</label><br>
-        <button class="btn" onclick="addToCart('Veggie Burger', 'sauce3', 'suppl3')">Ajouter au panier</button>
+        <button class="btn" onclick="addToCart('Veggie Burger', 'formule3', 'sauce3', 'suppl3')">Ajouter au panier</button>
     </div>
     <div class="menu-item">
         <h3>Spicy Burger</h3>
         <p>0,00€</p>
+        <label>Formule :</label>
+        <select id="formule4">
+            <option value="Seul">Sandwich seul</option>
+            <option value="Frites">Sandwich + frites</option>
+            <option value="Boisson">Sandwich + boisson</option>
+            <option value="Frites + Boisson">Sandwich + frites + boisson</option>
+        </select><br>
         <label>Sauce :</label>
         <select id="sauce4">
             <option>Algérienne</option>
@@ -64,35 +93,46 @@
         </select><br>
         <label><input type="checkbox" value="Cheddar" class="suppl4"> Cheddar</label>
         <label><input type="checkbox" value="Double steak" class="suppl4"> Double steak</label><br>
-        <button class="btn" onclick="addToCart('Spicy Burger', 'sauce4', 'suppl4')">Ajouter au panier</button>
+        <button class="btn" onclick="addToCart('Spicy Burger', 'formule4', 'sauce4', 'suppl4')">Ajouter au panier</button>
     </div>
     <div id="cart">
         <h3>Panier</h3>
+        <label for="clientName">Votre prénom :</label>
+        <input type="text" id="clientName" placeholder="Prénom"><br><br>
         <ul id="cartItems"></ul>
         <button class="btn" onclick="sendToWhatsApp()">Commander sur WhatsApp</button>
     </div>
     <script>
         const cart = [];
-        function addToCart(name, sauceId, supplClass) {
+        function addToCart(name, formuleId, sauceId, supplClass) {
+            const formule = document.getElementById(formuleId).value;
             const sauce = document.getElementById(sauceId).value;
             const supplements = Array.from(document.getElementsByClassName(supplClass))
                 .filter(input => input.checked).map(input => input.value);
-            cart.push({ name, sauce, supplements });
+            cart.push({ name, formule, sauce, supplements });
+            updateCartDisplay();
+        }
+        function removeItem(index) {
+            cart.splice(index, 1);
             updateCartDisplay();
         }
         function updateCartDisplay() {
             const cartItems = document.getElementById("cartItems");
             cartItems.innerHTML = "";
-            cart.forEach(item => {
+            cart.forEach((item, index) => {
                 const li = document.createElement("li");
-                li.textContent = `${item.name} - Sauce: ${item.sauce} - Suppléments: ${item.supplements.join(", ")}`;
+                li.innerHTML = `${item.name} (${item.formule}) - Sauce: ${item.sauce} - Suppléments: ${item.supplements.join(", ") || "Aucun"} <button class='remove-btn' onclick='removeItem(${index})'>Supprimer</button>`;
                 cartItems.appendChild(li);
             });
         }
         function sendToWhatsApp() {
-            let message = "Commande :%0A";
+            const name = document.getElementById("clientName").value.trim();
+            let message = "Commande chez " + document.title + " :%0A";
+            if (name) {
+                message += "Client : " + name + "%0A";
+            }
             cart.forEach(item => {
-                message += `- ${item.name} (Sauce: ${item.sauce}`;
+                message += `- ${item.name} (${item.formule}) (Sauce: ${item.sauce}`;
                 if (item.supplements.length > 0) {
                     message += `, Suppléments: ${item.supplements.join(", ")}`;
                 }
