@@ -2,55 +2,108 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Burger Paname V2</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f1ee; padding: 20px; color: #333; }
+    h1, h2 { text-align: center; }
+    .step { display: none; max-width: 600px; margin: 0 auto; }
+    .step.active { display: block; }
+    select, input[type="text"], button {
+      width: 100%; padding: 10px; margin: 10px 0; font-size: 16px;
+    }
+  </style>
   <script>
     let cart = [];
-    function nextStep(f, t) {
-      document.getElementById("step" + f).style.display = "none";
-      document.getElementById("step" + t).style.display = "block";
+
+    async function loadOptions(sheetId, tabName, selectId) {
+      const url = `https://opensheet.elk.sh/${sheetId}/${tabName}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const select = document.getElementById(selectId);
+      select.innerHTML = "";
+      data.forEach(item => {
+        if (parseInt(item.Stock) > 0) {
+          const option = document.createElement("option");
+          option.textContent = item.Nom;
+          select.appendChild(option);
+        }
+      });
     }
+
+    function nextStep(from, to) {
+      document.getElementById("step" + from).classList.remove("active");
+      document.getElementById("step" + to).classList.add("active");
+    }
+
     function addToCart() {
-      const b = document.getElementById("burger").value;
-      const d = document.getElementById("drink").value;
-      const f = document.getElementById("fries").value;
-      const cr = Array.from(document.querySelectorAll("input[name='crudites']:checked")).map(c => c.value).join(", ");
-      const ds = document.getElementById("dessert").value;
-      cart = [{name: b}, {name: d}, {name: f}, {name: "Crudités: "+cr}, {name: ds}];
-      updateCart(); nextStep(1, 2);
+      const burger = document.getElementById("burger").value;
+      const drink = document.getElementById("drink").value;
+      const fries = document.getElementById("fries").value;
+
+      cart = [
+        { name: burger },
+        { name: drink },
+        { name: fries }
+      ];
+      updateCart();
+      nextStep(1, 2);
     }
+
     function updateCart() {
-      const c = document.getElementById("cart");
-      c.innerHTML = ""; cart.forEach(i => { c.innerHTML += "<div>"+i.name+"</div>"; });
+      const container = document.getElementById("cart");
+      container.innerHTML = "";
+      cart.forEach((item) => {
+        container.innerHTML += `<div>${item.name}</div>`;
+      });
     }
+
     function sendOrder() {
       const name = document.getElementById("clientName").value;
-      let msg = "Commande pour " + name + " - Burger Paname:%0A";
-      cart.forEach(i => msg += "- " + i.name + "%0A");
-      window.open("https://wa.me/33616550952?text=" + msg, "_blank");
+      if (!name) {
+        alert("Merci d'entrer votre prénom.");
+        return;
+      }
+
+      let message = `Commande pour ${name} - Burger Paname :%0A`;
+      cart.forEach(item => {
+        message += `- ${item.name}%0A`;
+      });
+
+      const phone = "33616550952";
+      window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
     }
-    window.onload = () => { document.getElementById("step1").style.display = "block"; };
+
+    window.onload = () => {
+      document.getElementById("step1").classList.add("active");
+      const sheetId = "123Ozq3ba7_E2PZe_vunBQsOI18rcNAahhEAK8QaYd7M";
+      loadOptions(sheetId, "Burgers", "burger");
+      loadOptions(sheetId, "Boissons", "drink");
+      loadOptions(sheetId, "Accompagnements", "fries");
+    };
   </script>
 </head>
 <body>
-  <h1>Burger Paname V2</h1>
-  <div id="step1" style="display:none">
-    <select id="burger"><option>Classic Burger</option><option>Bacon Lover</option></select>
-    <select id="drink"><option>Coca</option><option>Fanta</option></select>
-    <select id="fries"><option>Frites</option><option>PDT sautées</option></select>
-    <label><input type="checkbox" name="crudites" value="Salade"> Salade</label>
-    <label><input type="checkbox" name="crudites" value="Tomates"> Tomates</label>
-    <select id="dessert"><option>Cookie</option><option>Sundae</option></select>
-    <button onclick="addToCart()">Suivant</button>
+  <h1>Commande Burger Paname - V2 Live</h1>
+  <div id="step1" class="step">
+    <h2>Étape 1 : Choix du menu</h2>
+    <select id="burger"></select>
+    <select id="drink"></select>
+    <select id="fries"></select>
+    <button onclick="addToCart()">Étape suivante</button>
   </div>
-  <div id="step2" style="display:none">
+
+  <div id="step2" class="step">
+    <h2>Étape 2 : Panier</h2>
     <div id="cart"></div>
-    <button onclick="nextStep(2,1)">Retour</button>
-    <button onclick="nextStep(2,3)">Continuer</button>
+    <button onclick="nextStep(2, 1)">Retour</button>
+    <button onclick="nextStep(2, 3)">Continuer</button>
   </div>
-  <div id="step3" style="display:none">
-    <input id="clientName" placeholder="Votre prénom">
-    <button onclick="sendOrder()">Envoyer WhatsApp</button>
+
+  <div id="step3" class="step">
+    <h2>Étape 3 : Finalisation</h2>
+    <input type="text" id="clientName" placeholder="Votre prénom" />
+    <button onclick="sendOrder()">Envoyer sur WhatsApp</button>
   </div>
 </body>
 </html>
