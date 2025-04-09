@@ -1,55 +1,13 @@
 
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <title>CommandNow - Accueil</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f1ee;
-      padding: 20px;
-    }
-    h1 {
-      color: #333;
-    }
-    .resto {
-      margin: 10px 0;
-    }
-    .resto a {
-      text-decoration: none;
-      color: #1a73e8;
-      font-size: 18px;
-    }
-    .resto a:hover {
-      text-decoration: underline;
-    }
-    input {
-      margin-bottom: 20px;
-      padding: 8px;
-      width: 100%;
-      max-width: 400px;
-      font-size: 16px;
-    }
-  </style>
-  <script>
-    function filterRestaurants() {
-      let input = document.getElementById("search").value.toLowerCase();
-      let restos = document.getElementsByClassName("resto");
-      for (let i = 0; i < restos.length; i++) {
-        let name = restos[i].innerText.toLowerCase();
-        restos[i].style.display = name.includes(input) ? "" : "none";
-      }
-    }
-  </script>
-</head>
+<head><meta charset="UTF-8"><title>CommandNow Accueil</title></head>
 <body>
-  <h1>Liste des restos disponibles, cliquez dessus</h1>
-  <input type="text" id="search" placeholder="Rechercher un restaurant..." onkeyup="filterRestaurants()" />
-  <div class="resto"><a href="burger-paname.html">Burger Paname (V5)</a></div>
-  <div class="resto"><a href="tacos-king.html">Tacos King (V5)</a></div>
-  <div class="resto"><a href="pizza-corner.html">Pizza Corner (V4.6)</a></div>
-  <div class="resto"><a href="veggie-vibe.html">Veggie Vibe (V4.6)</a></div>
-  <div class="resto"><a href="sushi-zone.html">Sushi Zone (V4.6)</a></div>
+  <h1>CommandNow - Accueil</h1>
+  <ul>
+    <li><a href="burger-paname.html">Burger Paname (V5)</a></li>
+    <li><a href="tacos-king.html">Tacos King (V5)</a></li>
+    <li><a href="burger-paname-v2.html">Burger Paname (V2)</a></li>
+  </ul>
 </body>
 </html>
