@@ -1,1 +1,56 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Commande V2</title></head><body><h1>Burger Paname V2</h1></body></html>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Burger Paname V2</title>
+  <script>
+    let cart = [];
+    function nextStep(f, t) {
+      document.getElementById("step" + f).style.display = "none";
+      document.getElementById("step" + t).style.display = "block";
+    }
+    function addToCart() {
+      const b = document.getElementById("burger").value;
+      const d = document.getElementById("drink").value;
+      const f = document.getElementById("fries").value;
+      const cr = Array.from(document.querySelectorAll("input[name='crudites']:checked")).map(c => c.value).join(", ");
+      const ds = document.getElementById("dessert").value;
+      cart = [{name: b}, {name: d}, {name: f}, {name: "Crudités: "+cr}, {name: ds}];
+      updateCart(); nextStep(1, 2);
+    }
+    function updateCart() {
+      const c = document.getElementById("cart");
+      c.innerHTML = ""; cart.forEach(i => { c.innerHTML += "<div>"+i.name+"</div>"; });
+    }
+    function sendOrder() {
+      const name = document.getElementById("clientName").value;
+      let msg = "Commande pour " + name + " - Burger Paname:%0A";
+      cart.forEach(i => msg += "- " + i.name + "%0A");
+      window.open("https://wa.me/33616550952?text=" + msg, "_blank");
+    }
+    window.onload = () => { document.getElementById("step1").style.display = "block"; };
+  </script>
+</head>
+<body>
+  <h1>Burger Paname V2</h1>
+  <div id="step1" style="display:none">
+    <select id="burger"><option>Classic Burger</option><option>Bacon Lover</option></select>
+    <select id="drink"><option>Coca</option><option>Fanta</option></select>
+    <select id="fries"><option>Frites</option><option>PDT sautées</option></select>
+    <label><input type="checkbox" name="crudites" value="Salade"> Salade</label>
+    <label><input type="checkbox" name="crudites" value="Tomates"> Tomates</label>
+    <select id="dessert"><option>Cookie</option><option>Sundae</option></select>
+    <button onclick="addToCart()">Suivant</button>
+  </div>
+  <div id="step2" style="display:none">
+    <div id="cart"></div>
+    <button onclick="nextStep(2,1)">Retour</button>
+    <button onclick="nextStep(2,3)">Continuer</button>
+  </div>
+  <div id="step3" style="display:none">
+    <input id="clientName" placeholder="Votre prénom">
+    <button onclick="sendOrder()">Envoyer WhatsApp</button>
+  </div>
+</body>
+</html>
